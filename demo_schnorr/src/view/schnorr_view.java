@@ -116,11 +116,27 @@ public class schnorr_view extends JFrame {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				
-				long q = Long.parseLong(txtQ.getText());
-				if(!taoKhoa.soNguyenTo(q))
+				if(!txtQ.getText().isEmpty())
 				{
-					JOptionPane.showMessageDialog(null, "Q không phải số nguyên tố");
+					try
+					{
+						long q = Long.parseLong(txtQ.getText());
+						
+						if(!taoKhoa.soNguyenTo(q))
+						{
+							JOptionPane.showMessageDialog(null, "Q không phải số nguyên tố");
+						}
+					}
+					catch(NumberFormatException event)
+					{
+						event.printStackTrace();
+					}
 				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Vui lòng nhập Q!");
+				}
+				
 				
 			}
 		});
@@ -207,12 +223,27 @@ public class schnorr_view extends JFrame {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				
-				long p = Long.parseLong(txtP.getText());
-				if(!taoKhoa.soNguyenTo(p))
+				if(!txtP.getText().isEmpty())
 				{
-					JOptionPane.showMessageDialog(null, "P không phải số nguyên tố");
+					try
+					{
+						long p = Long.parseLong(txtP.getText());
+						
+						if(!taoKhoa.soNguyenTo(p))
+						{
+							JOptionPane.showMessageDialog(null, "P không phải số nguyên tố");
+						}
+					}
+					catch(NumberFormatException event)
+					{
+						event.printStackTrace();
+					}
 				}
-			
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Vui lòng nhập P!");
+				}
+				
 			}
 		});
 		txtP.setColumns(10);
