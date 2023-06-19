@@ -1,0 +1,3 @@
+chức năng của nút chọn file, chọn chữ ký v
+1.chọn file:  tạo sẵn 1 file bản rõ -> tạo khóa, chữ ký, chữ ký xác minh cho bản rõ đó, rồi lưu lại chữ ký xác minh v sang 1 file txt khác
+2.chọn chữ ký v: mở file txt lưu chữ ký v -> hiển thị chữ ký v
