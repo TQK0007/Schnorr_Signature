@@ -1,3 +1,10 @@
+* cài hết các file jar 
+video cách cài đặt file jar và đọc file .xslx, .pdf
+1. pdf: https://www.youtube.com/watch?v=DdzX835l7Ok
+2. xlsx: https://www.youtube.com/watch?v=dkGoDFr8TdM&t=290s
+cài đặt file jar: https://www.youtube.com/watch?v=GMncZNs9Zrw&list=PL2ZAv6qJdzJTo9YQyE0TktZ4PT7ijoag3&index=1&t=352s
+
+
 chức năng của nút chọn file, chọn chữ ký v
 1.chọn file:  tạo sẵn 1 file bản rõ -> tạo khóa, chữ ký, chữ ký xác minh cho bản rõ đó, rồi lưu lại chữ ký xác minh v sang 1 file txt khác
 2.chọn chữ ký v: mở file txt lưu chữ ký v -> hiển thị chữ ký v

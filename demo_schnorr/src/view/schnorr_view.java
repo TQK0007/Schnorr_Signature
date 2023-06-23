@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -39,6 +38,15 @@ import java.awt.event.KeyEvent;
 import javax.swing.JRadioButton;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.*;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+
 
 public class schnorr_view extends JFrame {
 
@@ -75,6 +83,9 @@ public class schnorr_view extends JFrame {
 	 * Create the frame.
 	 */
 	public schnorr_view() {
+		setForeground(Color.BLACK);
+		setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		setTitle("Chữ ký Schnorr");
 		
 		
 		taoKhoa taoKhoa = new taoKhoa();
@@ -349,10 +360,6 @@ public class schnorr_view extends JFrame {
 		btnTaoKhoa.setBounds(107, 492, 178, 32);
 		panel.add(btnTaoKhoa);
 		
-		
-		
-		
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(Color.ORANGE, 2));
 		panel_1.setBounds(399, 10, 571, 531);
@@ -389,31 +396,108 @@ public class schnorr_view extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				txtAreaM.setText("");
+//				chỉ mở được file txt
 				
+//				txtAreaM.setText("");
+//				
+//				JFileChooser fileChooser = new JFileChooser();
+//
+//				fileChooser.setAcceptAllFileFilterUsed(true);
+//				int result = fileChooser.showOpenDialog(null);
+//				if(result == JFileChooser.APPROVE_OPTION)
+//				{
+//					File selectedFile = fileChooser.getSelectedFile();
+//					try
+//					{
+//						BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+//						String line = null;
+//						while((line = reader.readLine()) != null)
+//						{
+//							txtAreaM.append(line+"\n");
+//						}
+//						reader.close();
+//					}
+//					catch(IOException E)
+//					{
+//						E.printStackTrace();
+//					}
+//				}
+				
+				txtAreaM.setText("");				
 				JFileChooser fileChooser = new JFileChooser();
 
 				fileChooser.setAcceptAllFileFilterUsed(true);
-//				FileNameExtensionFilter filter = new FileNameExtensionFilter("Tệp Microsoft Word", "doc", "docx"); 
-//		        fileChooser.addChoosableFileFilter(filter);
 				int result = fileChooser.showOpenDialog(null);
 				if(result == JFileChooser.APPROVE_OPTION)
 				{
 					File selectedFile = fileChooser.getSelectedFile();
-					try
+					if(selectedFile.getName().endsWith(".txt"))
 					{
-						BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-						String line = null;
-						while((line = reader.readLine()) != null)
+						try
 						{
-							txtAreaM.append(line+"\n");
+							BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+							String line = null;
+							while((line = reader.readLine()) != null)
+							{
+								txtAreaM.append(line+"\n");
+							}
+							reader.close();
 						}
-						reader.close();
+						catch(IOException E)
+						{
+							E.printStackTrace();
+						}
 					}
-					catch(IOException E)
+					
+					else if(selectedFile.getName().endsWith(".docx"))
 					{
-						E.printStackTrace();
+						try
+						{
+							FileInputStream fis = new FileInputStream(selectedFile.getAbsolutePath());
+						    XWPFDocument document = new XWPFDocument(fis);
+						    XWPFWordExtractor extractor = new XWPFWordExtractor(document);
+						    txtAreaM.setText(extractor.getText());
+						    extractor.close();
+						    fis.close();
+						}
+						catch(IOException E)
+						{
+							E.printStackTrace();
+						}
 					}
+					
+					else if(selectedFile.getName().endsWith(".xlsx"))
+					{
+						try
+						{
+							FileInputStream fis = new FileInputStream(selectedFile.getAbsolutePath());
+							XSSFWorkbook wb = new XSSFWorkbook(fis);
+							XSSFSheet sh = wb.getSheet("Sheet1");
+							txtAreaM.setText(sh.getRow(0).getCell(0).toString());
+							wb.close();
+						}
+						catch(IOException E)
+						{
+							E.printStackTrace();
+						}
+					}
+					
+					else
+					{
+						try
+						{
+							FileInputStream fis = new FileInputStream(selectedFile.getAbsolutePath());
+							PDDocument document = PDDocument.load(fis);
+							PDFTextStripper pdfText = new PDFTextStripper();
+							
+							txtAreaM.setText(pdfText.getText(document));
+						}
+						catch(IOException E)
+						{
+							E.printStackTrace();
+						}
+					}
+					
 				}
 				
 			}
@@ -537,24 +621,6 @@ public class schnorr_view extends JFrame {
 		btnTaoCK.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-//				String m = txtAreaM.getText();
-//				taoChuKy.setM(m);
-//				
-//				long p,q,d,e1,r;
-//				p = Long.parseLong(txtP.getText());
-//				q = Long.parseLong(txtQ.getText());
-//				d = Long.parseLong(txtD.getText());
-//				e1 = Long.parseLong(txtE1.getText());
-//				r = taoChuKy.randomR();
-//				BigInteger s1, s2;
-//				
-//				s1 = taoChuKy.S1(e1, p);
-//				s2 = taoChuKy.S2(d, q, s1);
-//				
-//				txtR.setText(String.valueOf(r));
-//				txtS1.setText(s1.toString());
-//				txtS2.setText(s2.toString());
 				
 				if(radioButtonTDR.isSelected() && !radioButtonTCR.isSelected())
 				{
@@ -721,31 +787,39 @@ public class schnorr_view extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 			
-				if(txtV.getText().equals(""))
+
+				if(txtV.getText().equals("") && txtCKSan.getText().equals(""))
 				{
-					if(txtS1.getText().equals(txtCKSan.getText()))
-					{
-						JOptionPane.showMessageDialog(null,"Chữ ký hợp lệ ");
-					}
-					
-					else
-					{
-						JOptionPane.showMessageDialog(null, "chữ ký không hợp lệ bản rõ đã bị chỉnh sửa!");
-					}
+					JOptionPane.showMessageDialog(null, "Chưa có chữ ký xác minh");
 				}
 				else
 				{
-					if(txtS1.getText().equals(txtV.getText()))
+					if(txtV.getText().equals(""))
 					{
-						JOptionPane.showMessageDialog(null,"Chữ ký hợp lệ ");
+						if(txtS1.getText().equals(txtCKSan.getText()))
+						{
+							JOptionPane.showMessageDialog(null,"Chữ ký hợp lệ ");
+						}
+						
+						else
+						{
+							JOptionPane.showMessageDialog(null, "chữ ký không hợp lệ bản rõ đã bị chỉnh sửa!");
+						}
 					}
-					
 					else
 					{
-						JOptionPane.showMessageDialog(null, "chữ ký không hợp lệ bản rõ đã bị chỉnh sửa!");
+						if(txtS1.getText().equals(txtV.getText()))
+						{
+							JOptionPane.showMessageDialog(null,"Chữ ký hợp lệ ");
+						}
+						
+						else
+						{
+							JOptionPane.showMessageDialog(null, "chữ ký không hợp lệ bản rõ đã bị chỉnh sửa!");
+						}
 					}
 				}
-				
+			
 			}
 		});
 		
@@ -785,9 +859,6 @@ public class schnorr_view extends JFrame {
 		btnLamMoi.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnLamMoi.setBounds(393, 153, 200, 48);
 		panel_2.add(btnLamMoi);
-		
-		
-		
 		
 	}
 }
